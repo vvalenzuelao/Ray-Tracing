@@ -33,9 +33,8 @@ def ElectronEntrancePoint_Camera(xi, yi, Energies, length):
         k = k_MeV * 1.60218e-13
         m = 9.109e-31
         c = 3.0e8
-        R_H = 0.01
+        R_H = 0.02
         epsilon_0 = 8.854e-12
-
         gamma = 1 + k / (m * c**2)
         v = c * np.sqrt(1 - (1 / gamma)**2)
         A = np.pi * R_H**2
@@ -120,7 +119,6 @@ def compute_trajectory(start_point, r, alpha, theta, yff, num_points=100):
 
     x_cutoff = 0.18
 
-    # Calculamos intersección con yff
     xff = xf + (yff - yf) / np.tan(theta)
     if xff > x_cutoff:
         xff = x_cutoff
@@ -128,16 +126,13 @@ def compute_trajectory(start_point, r, alpha, theta, yff, num_points=100):
     x_line = np.array([xf, xff])
     y_line = np.array([yf, yff])
 
-    # Recorta si algún valor del arco supera 0.18
     arc_mask = x_arc <= x_cutoff
     x_arc = x_arc[arc_mask]
     y_arc = y_arc[arc_mask]
 
-    # Junta arco y línea
     x_total = np.concatenate((x_arc, x_line))
     y_total = np.concatenate((y_arc, y_line))
 
-    # Recorta si algún valor de línea supera 0.18
     line_mask = x_total <= x_cutoff
     x_total = x_total[line_mask]
     y_total = y_total[line_mask]
@@ -167,15 +162,10 @@ for electron in electron_intersections:
     color = cmap(norm(E))
     plt.plot(x_vals, y_vals, color=color, alpha=0.5)
 
-# Línea horizontal de y = 0.02 desde x = 0.025 hasta x = 0.125
 plt.plot([0.025, 0.125], [0.02, 0.02], color='green', linestyle='--', label='Fin del campo magnético')
-# Línea vertical en x = 0.125 desde y = 0 hasta y = 0.02
 plt.vlines(x=0.125, ymin=0, ymax=0.02, color='green', linestyle='--')
 
-# Línea horizontal de y = 0.05 desde x = 0.125 hasta x = 0.18
 plt.plot([0.03, 0.17], [0.05, 0.05], color='orange', linestyle='--', label='Image Plate')
-# Línea vertical en x = 0.18 desde y = 0 hasta y = 0.05
-#plt.vlines(x=0.18, ymin=0, ymax=0.0, color='orange', linestyle='--')
 
 plt.xlabel('x (m)')
 plt.ylabel('y (m)')
@@ -183,7 +173,6 @@ plt.title('Trayectorias de electrones')
 plt.legend()
 plt.grid(True)
 
-# Colorbar de energía
 sm = cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])
 cbar = plt.colorbar(sm)
