@@ -20,7 +20,7 @@ def Inicialization(electron_quantity):
     for y in y_i:
         x_i.append(-0.1)
 
-    Energies_D = np.random.normal(1.50, 0.4667, electron_quantity)
+    Energies_D = np.random.normal(0.7, 0.7, electron_quantity)
     Energies_D = np.clip(Energies_D, 0, 1.7)
 
     return x_i, y_i, Energies_D
@@ -92,8 +92,6 @@ def ElectronExitPoint(electron_entrances, B_field_strength, yf):
                 dir_xf = np.cos(theta)
                 dir_yf = np.sin(theta)
                 Electron_Exits.append(((x0, y0), (xfv, yfv), (dir_xf, dir_yf), E, r, theta, alpha))
-
-
     return Electron_Exits
 
 def Intersections(electron_exits, yff):
@@ -121,7 +119,6 @@ def compute_trajectory(start_point, r, alpha, theta, yff, num_points=100):
     yf = y_arc[-1]
 
     x_cutoff = 0.18
-
 
     # Calculamos intersección con yff
     xff = xf + (yff - yf) / np.tan(theta)
@@ -203,7 +200,7 @@ min_x = []
 max_x = []
 
 for E_target in energies_of_interest:
-    x_positions = [e[2][0] for e in electron_intersections if abs(e[3] - E_target) < 0.05]
+    x_positions = [e[2][0] for e in electron_intersections if np.abs(e[3] - E_target) < 0.05]
     if x_positions:
         mean_x.append(np.mean(x_positions))
         min_x.append(np.min(x_positions))
