@@ -22,7 +22,7 @@ def Inicialization(electron_quantity):
     z_i = np.random.normal(0, 0.02, electron_quantity)
     z_i = np.clip(z_i, -0.02, 0.02)
     Energies_D = np.random.normal(0.7, 0.3, electron_quantity)
-    Energies_D = np.clip(Energies_D, 0.2, 1.6)
+    Energies_D = np.clip(Energies_D, 0, 1.6)
     return x_i, y_i, z_i, Energies_D
 
 def ElectronEntrancePoint_Camera(xi, yi, zi, Energies, length):
